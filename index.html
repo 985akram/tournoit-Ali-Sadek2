@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>دورة حي علي صادق - شجرة البطولة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            background: #020617;
+            border-radius: 40px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .nav button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .nav button.active {
+            background: #1e293b;
+            border-radius: 30px;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #020617;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 10px 6px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        th {
+            background: #1e293b;
+            color: #38bdf8;
+        }
+        tr:nth-child(even) {
+            background: #0f172a;
+        }
+        .groups-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .group-box {
+            flex: 1;
+            min-width: 280px;
+        }
+        .group-box h3 {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .match {
+            background: #1e293b;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .match .teams {
+            font-weight: bold;
+            min-width: 160px;
+        }
+        .match .time {
+            color: #38bdf8;
+            font-size: 0.8rem;
+        }
+        .match input {
+            width: 55px;
+            text-align: center;
+            background: #020617;
+            border: 1px solid #334155;
+            color: white;
+            padding: 6px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .scorer-item {
+            background: #1e293b;
+            padding: 8px 15px;
+            margin: 8px 0;
+            border-radius: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .scorer-name {
+            font-weight: bold;
+        }
+        .scorer-goals {
+            background: #facc15;
+            color: #0f172a;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        button {
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+        .save-btn {
+            background: #22c55e;
+            color: white;
+            margin-top: 15px;
+        }
+        .add-goal {
+            background: #3b82f6;
+            color: white;
+            margin: 0 4px;
+        }
+        .delete-player {
+            background: #ef4444;
+            color: white;
+        }
+        .add-player {
+            background: #8b5cf6;
+            color: white;
+        }
+        .form-box {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+        .win { background: #22c55e; }
+        .draw { background: #9ca3af; }
+        .loss { background: #ef4444; }
+        
+        /* ---------- شجرة البطولة (Knockout Bracket) ---------- */
+        .bracket {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .semi-bracket {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            position: relative;
+        }
+        .semi-match {
+            background: #1e293b;
+            border-radius: 16px;
+            width: 320px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .semi-match h4 {
+            color: #facc15;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .match-teams {
+            font-weight: bold;
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+        .leg-container {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 6px;
+            margin: 8px 0;
+        }
+        .leg-title {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        .score-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .score-inputs input {
+            width: 50px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        .aggregate {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+        .winner-tag {
+            background: #10b981;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            margin-top: 6px;
+        }
+        .final-bracket {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .final-match, .third-match {
+            background: #1e293b;
+            border-radius: 16px;
+            width: 300px;
+            padding: 12px;
+            text-align: center;
+        }
+        .final-match h4, .third-match h4 {
+            color: #facc15;
+        }
+        .champion-message {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            padding: 15px 25px;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        /* خطوط بسيطة للتوصيل (اختيارية) */
+        @media (min-width: 900px) {
+            .semi-bracket::before {
+                content: '';
+                position: absolute;
+                bottom: -25px;
+                width: 80%;
+                height: 2px;
+                background: #475569;
+                display: none; /* يمكن تفعيلها لكنها معقدة */
+            }
+        }
+        @media (max-width: 800px) {
+            .semi-match { width: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav">
+    <button onclick="showPage('groups')" class="active">📊 المجموعات</button>
+    <button onclick="showPage('matches')">⚽ المباريات</button>
+    <button onclick="showPage('scorers')">🎯 الهدافين</button>
+    <button onclick="showPage('finals')">🏆 النهائيات</button>
+</div>
+
+<!-- المجموعات -->
+<div id="groups" class="page active">
+    <div class="groups-container">
+        <div class="group-box">
+            <h3>🏆 المجموعة الأولى</h3>
+            <table id="groupATable">
+                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>عليه</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="group-box">
+            <h3>🏆 المجموعة الثانية</h3>
+            <table id="groupBTable">
+                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>عليه</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- المباريات -->
+<div id="matches" class="page">
+    <h3>📅 مباريات دور المجموعات</h3>
+    <div id="matchesList"></div>
+    <button class="save-btn" onclick="saveAllData()">💾 حفظ جميع البيانات</button>
+</div>
+
+<!-- الهدافين -->
+<div id="scorers" class="page">
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <input type="text" id="newPlayerName" placeholder="اسم اللاعب" style="flex:1; padding: 8px; border-radius: 30px; border: none; background:#1e293b; color:white;">
+        <button class="add-player" onclick="addScorer()">➕ إضافة لاعب</button>
+    </div>
+    <div id="scorersList"></div>
+</div>
+
+<!-- النهائيات (Knockout Bracket) -->
+<div id="finals" class="page">
+    <div id="bracketContainer" class="bracket"></div>
+</div>
+
+<script>
+    // -------------------- الفرق والمجموعات --------------------
+    const GROUP_A = ["قروسل", "رابحي", "اسماعيل"];
+    const GROUP_B = ["الطاهر", "جمال", "حقو"];
+    const ALL_TEAMS = [...GROUP_A, ...GROUP_B];
+
+    const GROUP_MATCHES = [
+        { id: "m0", team1: "جمال", team2: "حقو", time: "الجمعة 27 مارس | 16:30", group: "B" },
+        { id: "m1", team1: "قروسل", team2: "رابحي", time: "الجمعة 27 مارس | 17:30", group: "A" },
+        { id: "m2", team1: "قروسل", team2: "اسماعيل", time: "السبت 28 مارس | 16:30", group: "A" },
+        { id: "m3", team1: "الطاهر", team2: "جمال", time: "السبت 28 مارس | 17:30", group: "B" },
+        { id: "m4", team1: "رابحي", team2: "اسماعيل", time: "الأحد 29 مارس | 16:30", group: "A" },
+        { id: "m5", team1: "الطاهر", team2: "حقو", time: "الأحد 29 مارس | 17:30", group: "B" }
+    ];
+
+    let groupScores = {};
+    let teamsStats = {};
+    let teamHistory = {};
+
+    let knockout = {
+        semi1: { t1: "", t2: "", leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } },
+        semi2: { t1: "", t2: "", leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } },
+        final: { t1: "", t2: "", score1: "", score2: "" },
+        third: { t1: "", t2: "", score1: "", score2: "" }
+    };
+
+    let scorers = {};
+
+    // ---------- إحصائيات المجموعات ----------
+    function initStats() {
+        ALL_TEAMS.forEach(team => {
+            teamsStats[team] = { p: 0, w: 0, d: 0, l: 0, gs: 0, ga: 0, pts: 0 };
+            teamHistory[team] = [];
+        });
+    }
+
+    function computeStats() {
+        initStats();
+        GROUP_MATCHES.forEach(match => {
+            const res = groupScores[match.id];
+            if (!res || res.score1 === "" || res.score2 === "") return;
+            let g1 = parseInt(res.score1), g2 = parseInt(res.score2);
+            if (isNaN(g1) || isNaN(g2)) return;
+            const t1 = match.team1, t2 = match.team2;
+            teamsStats[t1].p++; teamsStats[t2].p++;
+            teamsStats[t1].gs += g1; teamsStats[t1].ga += g2;
+            teamsStats[t2].gs += g2; teamsStats[t2].ga += g1;
+            let result1, result2;
+            if (g1 > g2) {
+                teamsStats[t1].w++; teamsStats[t1].pts += 3;
+                teamsStats[t2].l++;
+                result1 = "win"; result2 = "loss";
+            } else if (g1 < g2) {
+                teamsStats[t2].w++; teamsStats[t2].pts += 3;
+                teamsStats[t1].l++;
+                result1 = "loss"; result2 = "win";
+            } else {
+                teamsStats[t1].d++; teamsStats[t2].d++;
+                teamsStats[t1].pts++; teamsStats[t2].pts++;
+                result1 = "draw"; result2 = "draw";
+            }
+            teamHistory[t1].push(result1);
+            if (teamHistory[t1].length > 3) teamHistory[t1].shift();
+            teamHistory[t2].push(result2);
+            if (teamHistory[t2].length > 3) teamHistory[t2].shift();
+        });
+    }
+
+    function getSortedGroup(groupTeams) {
+        let arr = groupTeams.map(team => ({ name: team, ...teamsStats[team] }));
+        arr.sort((a,b) => {
+            if (a.pts !== b.pts) return b.pts - a.pts;
+            let gdA = a.gs - a.ga, gdB = b.gs - b.ga;
+            if (gdA !== gdB) return gdB - gdA;
+            return b.gs - a.gs;
+        });
+        return arr;
+    }
+
+    function renderGroupTables() {
+        const groupAData = getSortedGroup(GROUP_A);
+        const groupBData = getSortedGroup(GROUP_B);
+        function buildRows(data) {
+            return data.map(team => {
+                const diff = team.gs - team.ga;
+                const last3 = teamHistory[team.name] || [];
+                const boxes = last3.map(r => `<span class="form-box ${r === 'win' ? 'win' : r === 'draw' ? 'draw' : 'loss'}"></span>`).join('');
+                return `<tr>
+                    <td>${team.name}</td>
+                    <td>${team.p}</td><td>${team.w}</td><td>${team.d}</td><td>${team.l}</td>
+                    <td>${team.gs}</td><td>${team.ga}</td><td>${diff}</td><td>${team.pts}</td>
+                    <td>${boxes || '—'}</td>
+                </tr>`;
+            }).join('');
+        }
+        document.querySelector("#groupATable tbody").innerHTML = buildRows(groupAData);
+        document.querySelector("#groupBTable tbody").innerHTML = buildRows(groupBData);
+    }
+
+    function renderGroupMatches() {
+        const container = document.getElementById("matchesList");
+        container.innerHTML = "";
+        GROUP_MATCHES.forEach(match => {
+            const saved = groupScores[match.id] || { score1: "", score2: "" };
+            const div = document.createElement("div");
+            div.className = "match";
+            div.innerHTML = `
+                <div class="teams">${match.team1} 🆚 ${match.team2}</div>
+                <div class="time">${match.time}</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="${match.id}_1" value="${saved.score1}" placeholder="0" min="0" step="1">
+                    <span>-</span>
+                    <input type="number" id="${match.id}_2" value="${saved.score2}" placeholder="0" min="0" step="1">
+                </div>
+            `;
+            container.appendChild(div);
+            const inp1 = document.getElementById(`${match.id}_1`);
+            const inp2 = document.getElementById(`${match.id}_2`);
+            const updateMatch = () => {
+                let v1 = inp1.value.trim() === "" ? "" : inp1.value;
+                let v2 = inp2.value.trim() === "" ? "" : inp2.value;
+                if (v1 !== "" && v2 !== "" && !isNaN(parseInt(v1)) && !isNaN(parseInt(v2))) {
+                    groupScores[match.id] = { score1: v1, score2: v2 };
+                } else {
+                    groupScores[match.id] = { score1: "", score2: "" };
+                }
+                computeStats();
+                renderGroupTables();
+                updateKnockoutTeams();
+                renderBracket();
+                saveAllData();
+            };
+            inp1.addEventListener("input", updateMatch);
+            inp2.addEventListener("input", updateMatch);
+        });
+    }
+
+    function updateKnockoutTeams() {
+        const groupA = getSortedGroup(GROUP_A);
+        const groupB = getSortedGroup(GROUP_B);
+        if (groupA.length < 2 || groupB.length < 2) return;
+        const A1 = groupA[0].name, A2 = groupA[1].name;
+        const B1 = groupB[0].name, B2 = groupB[1].name;
+        if (knockout.semi1.t1 !== A1 || knockout.semi1.t2 !== B2) {
+            knockout.semi1 = { t1: A1, t2: B2, leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } };
+        }
+        if (knockout.semi2.t1 !== B1 || knockout.semi2.t2 !== A2) {
+            knockout.semi2 = { t1: B1, t2: A2, leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } };
+        }
+        updateFinalAndThirdFromSemis();
+    }
+
+    function getSemiWinner(semi) {
+        const leg1 = semi.leg1, leg2 = semi.leg2;
+        if (leg1.score1 === "" || leg1.score2 === "" || leg2.score1 === "" || leg2.score2 === "") return null;
+        let s1_1 = parseInt(leg1.score1), s1_2 = parseInt(leg1.score2);
+        let s2_1 = parseInt(leg2.score1), s2_2 = parseInt(leg2.score2);
+        if (isNaN(s1_1) || isNaN(s1_2) || isNaN(s2_1) || isNaN(s2_2)) return null;
+        const aggTeam1 = s1_1 + s2_2;
+        const aggTeam2 = s1_2 + s2_1;
+        if (aggTeam1 > aggTeam2) return semi.t1;
+        if (aggTeam2 > aggTeam1) return semi.t2;
+        const awayTeam1 = s2_2, awayTeam2 = s1_2;
+        if (awayTeam1 > awayTeam2) return semi.t1;
+        if (awayTeam2 > awayTeam1) return semi.t2;
+        return semi.t1;
+    }
+
+    function updateFinalAndThirdFromSemis() {
+        const winner1 = getSemiWinner(knockout.semi1);
+        const winner2 = getSemiWinner(knockout.semi2);
+        const loser1 = winner1 ? (winner1 === knockout.semi1.t1 ? knockout.semi1.t2 : knockout.semi1.t1) : null;
+        const loser2 = winner2 ? (winner2 === knockout.semi2.t1 ? knockout.semi2.t2 : knockout.semi2.t1) : null;
+        if (winner1 && winner2) {
+            knockout.final = { t1: winner1, t2: winner2, score1: knockout.final.score1 || "", score2: knockout.final.score2 || "" };
+        } else {
+            if (!knockout.final.t1) knockout.final = { t1: "?", t2: "?", score1: "", score2: "" };
+        }
+        if (loser1 && loser2) {
+            knockout.third = { t1: loser1, t2: loser2, score1: knockout.third.score1 || "", score2: knockout.third.score2 || "" };
+        } else {
+            if (!knockout.third.t1) knockout.third = { t1: "?", t2: "?", score1: "", score2: "" };
+        }
+    }
+
+    function getChampion() {
+        if (knockout.final.score1 !== "" && knockout.final.score2 !== "") {
+            let s1 = parseInt(knockout.final.score1), s2 = parseInt(knockout.final.score2);
+            if (!isNaN(s1) && !isNaN(s2)) {
+                if (s1 > s2) return knockout.final.t1;
+                if (s2 > s1) return knockout.final.t2;
+            }
+        }
+        return null;
+    }
+
+    // عرض شجرة البطولة (Knockout Bracket)
+    function renderBracket() {
+        const container = document.getElementById("bracketContainer");
+        if (!container) return;
+
+        const semi1Winner = getSemiWinner(knockout.semi1);
+        const semi2Winner = getSemiWinner(knockout.semi2);
+        
+        const semi1Agg = (knockout.semi1.leg1.score1 !== "" && knockout.semi1.leg1.score2 !== "" && knockout.semi1.leg2.score1 !== "" && knockout.semi1.leg2.score2 !== "") 
+            ? `${parseInt(knockout.semi1.leg1.score1)+parseInt(knockout.semi1.leg2.score2)} - ${parseInt(knockout.semi1.leg1.score2)+parseInt(knockout.semi1.leg2.score1)}` 
+            : "—";
+        const semi2Agg = (knockout.semi2.leg1.score1 !== "" && knockout.semi2.leg1.score2 !== "" && knockout.semi2.leg2.score1 !== "" && knockout.semi2.leg2.score2 !== "")
+            ? `${parseInt(knockout.semi2.leg1.score1)+parseInt(knockout.semi2.leg2.score2)} - ${parseInt(knockout.semi2.leg1.score2)+parseInt(knockout.semi2.leg2.score1)}`
+            : "—";
+
+        const champion = getChampion();
+
+        let html = `
+            <div class="semi-bracket">
+                <!-- نصف النهائي 1 -->
+                <div class="semi-match">
+                    <h4>🏅 نصف النهائي 1 (ذهاب/إياب)</h4>
+                    <div class="match-teams">${knockout.semi1.t1} 🆚 ${knockout.semi1.t2}</div>
+                    <div class="leg-container">
+                        <div class="leg-title">مباراة الذهاب</div>
+                        <div class="score-inputs">
+                            <input type="number" id="semi1_leg1_1" value="${knockout.semi1.leg1.score1}" placeholder="0" min="0">
+                            <span>-</span>
+                            <input type="number" id="semi1_leg1_2" value="${knockout.semi1.leg1.score2}" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="leg-container">
+                        <div class="leg-title">مباراة الإياب</div>
+                        <div class="score-inputs">
+                            <input type="number" id="semi1_leg2_1" value="${knockout.semi1.leg2.score1}" placeholder="0" min="0">
+                            <span>-</span>
+                            <input type="number" id="semi1_leg2_2" value="${knockout.semi1.leg2.score2}" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="aggregate">المجموع: ${semi1Agg}</div>
+                    ${semi1Winner ? `<div class="winner-tag">✅ الفائز: ${semi1Winner}</div>` : '<div class="aggregate">⏳ لم يتحدد بعد</div>'}
+                </div>
+                <!-- نصف النهائي 2 -->
+                <div class="semi-match">
+                    <h4>🏅 نصف النهائي 2 (ذهاب/إياب)</h4>
+                    <div class="match-teams">${knockout.semi2.t1} 🆚 ${knockout.semi2.t2}</div>
+                    <div class="leg-container">
+                        <div class="leg-title">مباراة الذهاب</div>
+                        <div class="score-inputs">
+                            <input type="number" id="semi2_leg1_1" value="${knockout.semi2.leg1.score1}" placeholder="0" min="0">
+                            <span>-</span>
+                            <input type="number" id="semi2_leg1_2" value="${knockout.semi2.leg1.score2}" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="leg-container">
+                        <div class="leg-title">مباراة الإياب</div>
+                        <div class="score-inputs">
+                            <input type="number" id="semi2_leg2_1" value="${knockout.semi2.leg2.score1}" placeholder="0" min="0">
+                            <span>-</span>
+                            <input type="number" id="semi2_leg2_2" value="${knockout.semi2.leg2.score2}" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="aggregate">المجموع: ${semi2Agg}</div>
+                    ${semi2Winner ? `<div class="winner-tag">✅ الفائز: ${semi2Winner}</div>` : '<div class="aggregate">⏳ لم يتحدد بعد</div>'}
+                </div>
+            </div>
+            <div class="final-bracket">
+                <div class="final-match">
+                    <h4>🏆 المباراة النهائية</h4>
+                    <div class="match-teams">${knockout.final.t1} 🆚 ${knockout.final.t2}</div>
+                    <div class="score-inputs">
+                        <input type="number" id="final_1" value="${knockout.final.score1}" placeholder="0" min="0">
+                        <span>-</span>
+                        <input type="number" id="final_2" value="${knockout.final.score2}" placeholder="0" min="0">
+                    </div>
+                </div>
+                <div class="third-match">
+                    <h4>🥉 مباراة المركز الثالث</h4>
+                    <div class="match-teams">${knockout.third.t1} 🆚 ${knockout.third.t2}</div>
+                    <div class="score-inputs">
+                        <input type="number" id="third_1" value="${knockout.third.score1}" placeholder="0" min="0">
+                        <span>-</span>
+                        <input type="number" id="third_2" value="${knockout.third.score2}" placeholder="0" min="0">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (champion) {
+            html += `<div class="champion-message">🏆 مبروك لفريق ${champion} 🏆</div>`;
+        } else if (knockout.final.score1 !== "" && knockout.final.score2 !== "") {
+            html += `<div class="champion-message" style="background: #334155;">⚠️ تعادل في النهائي، لم يتم تحديد البطل</div>`;
+        }
+
+        container.innerHTML = html;
+        
+        // ربط الأحداث
+        const semi1_leg1_1 = document.getElementById("semi1_leg1_1");
+        const semi1_leg1_2 = document.getElementById("semi1_leg1_2");
+        const semi1_leg2_1 = document.getElementById("semi1_leg2_1");
+        const semi1_leg2_2 = document.getElementById("semi1_leg2_2");
+        const semi2_leg1_1 = document.getElementById("semi2_leg1_1");
+        const semi2_leg1_2 = document.getElementById("semi2_leg1_2");
+        const semi2_leg2_1 = document.getElementById("semi2_leg2_1");
+        const semi2_leg2_2 = document.getElementById("semi2_leg2_2");
+        const final_1 = document.getElementById("final_1");
+        const final_2 = document.getElementById("final_2");
+        const third_1 = document.getElementById("third_1");
+        const third_2 = document.getElementById("third_2");
+        
+        const updateData = () => {
+            knockout.semi1.leg1.score1 = semi1_leg1_1?.value || "";
+            knockout.semi1.leg1.score2 = semi1_leg1_2?.value || "";
+            knockout.semi1.leg2.score1 = semi1_leg2_1?.value || "";
+            knockout.semi1.leg2.score2 = semi1_leg2_2?.value || "";
+            knockout.semi2.leg1.score1 = semi2_leg1_1?.value || "";
+            knockout.semi2.leg1.score2 = semi2_leg1_2?.value || "";
+            knockout.semi2.leg2.score1 = semi2_leg2_1?.value || "";
+            knockout.semi2.leg2.score2 = semi2_leg2_2?.value || "";
+            knockout.final.score1 = final_1?.value || "";
+            knockout.final.score2 = final_2?.value || "";
+            knockout.third.score1 = third_1?.value || "";
+            knockout.third.score2 = third_2?.value || "";
+            updateFinalAndThirdFromSemis();
+            renderBracket();
+            saveAllData();
+        };
+        
+        const inputs = [semi1_leg1_1, semi1_leg1_2, semi1_leg2_1, semi1_leg2_2, semi2_leg1_1, semi2_leg1_2, semi2_leg2_1, semi2_leg2_2, final_1, final_2, third_1, third_2];
+        inputs.forEach(inp => { if (inp) inp.addEventListener("input", updateData); });
+    }
+
+    // ---------- الهدافين ----------
+    function renderScorers() {
+        const container = document.getElementById("scorersList");
+        if (!container) return;
+        const sorted = Object.entries(scorers).sort((a,b) => b[1] - a[1]);
+        if (sorted.length === 0) {
+            container.innerHTML = "<div style='text-align:center; color:#94a3b8;'>✨ لا يوجد هدافون بعد، أضف لاعباً</div>";
+            return;
+        }
+        container.innerHTML = sorted.map(([name, goals]) => `
+            <div class="scorer-item">
+                <span class="scorer-name">⚽ ${name}</span>
+                <div>
+                    <span class="scorer-goals">${goals} هدف</span>
+                    <button class="add-goal" data-player="${name}">+1</button>
+                    <button class="delete-player" data-player="${name}">🗑 حذف</button>
+                </div>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll(".add-goal").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const player = btn.getAttribute("data-player");
+                scorers[player] = (scorers[player] || 0) + 1;
+                renderScorers();
+                saveAllData();
+            });
+        });
+        document.querySelectorAll(".delete-player").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const player = btn.getAttribute("data-player");
+                delete scorers[player];
+                renderScorers();
+                saveAllData();
+            });
+        });
+    }
+
+    function addScorer() {
+        const input = document.getElementById("newPlayerName");
+        const name = input.value.trim();
+        if (name === "") return;
+        scorers[name] = scorers[name] || 0;
+        renderScorers();
+        input.value = "";
+        saveAllData();
+    }
+
+    // ---------- حفظ وتحميل ----------
+    function saveAllData() {
+        const fullData = { groupScores, knockout, scorers };
+        localStorage.setItem("ChampionshipFull", JSON.stringify(fullData));
+    }
+
+    function loadAllData() {
+        const saved = localStorage.getItem("ChampionshipFull");
+        if (!saved) return;
+        try {
+            const data = JSON.parse(saved);
+            if (data.groupScores) groupScores = data.groupScores;
+            if (data.knockout) knockout = data.knockout;
+            if (data.scorers) scorers = data.scorers;
+            if (!knockout.semi1.leg1) knockout.semi1 = { t1: knockout.semi1.t1 || "", t2: knockout.semi1.t2 || "", leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } };
+            if (!knockout.semi2.leg1) knockout.semi2 = { t1: knockout.semi2.t1 || "", t2: knockout.semi2.t2 || "", leg1: { score1: "", score2: "" }, leg2: { score1: "", score2: "" } };
+        } catch(e) {}
+        GROUP_MATCHES.forEach(m => { if (!groupScores[m.id]) groupScores[m.id] = { score1: "", score2: "" }; });
+    }
+
+    // ---------- التنقل ----------
+    function showPage(pageId) {
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+        document.getElementById(pageId).classList.add("active");
+        document.querySelectorAll(".nav button").forEach(btn => btn.classList.remove("active"));
+        event.target.classList.add("active");
+        if (pageId === "groups") renderGroupTables();
+        if (pageId === "matches") renderGroupMatches();
+        if (pageId === "scorers") renderScorers();
+        if (pageId === "finals") { updateKnockoutTeams(); renderBracket(); }
+    }
+
+    // ---------- بدء التشغيل ----------
+    function init() {
+        loadAllData();
+        initStats();
+        computeStats();
+        renderGroupTables();
+        renderGroupMatches();
+        renderScorers();
+        updateKnockoutTeams();
+        renderBracket();
+        window.saveAllData = saveAllData;
+        window.showPage = showPage;
+        window.addScorer = addScorer;
+    }
+    init();
+</script>
+</body>
+</html>
