@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>دورة حي علي صادق - شجرة البطولة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -14,29 +15,32 @@
             font-family: 'Cairo', sans-serif;
             background: #0f172a;
             color: white;
-            padding: 20px;
+            padding: 12px;
         }
         .nav {
             display: flex;
             justify-content: center;
             background: #020617;
             border-radius: 40px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
+            gap: 4px;
         }
         .nav button {
-            padding: 12px 20px;
+            padding: 10px 14px;
             background: none;
             border: none;
             color: white;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             transition: 0.2s;
+            border-radius: 30px;
+            flex: 1;
+            min-width: 70px;
         }
         .nav button.active {
             background: #1e293b;
-            border-radius: 30px;
         }
         .page {
             display: none;
@@ -44,31 +48,7 @@
         .page.active {
             display: block;
         }
-        .card {
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 10px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #020617;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        th, td {
-            padding: 10px 6px;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-        th {
-            background: #1e293b;
-            color: #38bdf8;
-        }
-        tr:nth-child(even) {
-            background: #0f172a;
-        }
+        /* جداول المجموعات - تمرير أفقي للهواتف */
         .groups-container {
             display: flex;
             flex-wrap: wrap;
@@ -78,6 +58,7 @@
         .group-box {
             flex: 1;
             min-width: 280px;
+            overflow-x: auto;
         }
         .group-box h3 {
             background: #1e293b;
@@ -85,24 +66,49 @@
             border-radius: 12px;
             text-align: center;
             margin-bottom: 12px;
+            font-size: 1.1rem;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #020617;
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 500px; /* يضمن تمرير سلس */
+        }
+        th, td {
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        th {
+            background: #1e293b;
+            color: #38bdf8;
+        }
+        tr:nth-child(even) {
+            background: #0f172a;
+        }
+        /* مباريات المجموعات */
         .match {
             background: #1e293b;
             padding: 12px;
             margin: 12px 0;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
         }
         .match .teams {
             font-weight: bold;
-            min-width: 160px;
+            font-size: 1rem;
+            min-width: 140px;
         }
         .match .time {
             color: #38bdf8;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
         .match input {
             width: 55px;
@@ -110,42 +116,50 @@
             background: #020617;
             border: 1px solid #334155;
             color: white;
-            padding: 6px;
-            border-radius: 8px;
+            padding: 8px 4px;
+            border-radius: 12px;
             font-weight: bold;
+            font-size: 1rem;
         }
+        /* الهدافين */
         .scorer-item {
             background: #1e293b;
-            padding: 8px 15px;
+            padding: 10px 15px;
             margin: 8px 0;
             border-radius: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .scorer-name {
             font-weight: bold;
+            font-size: 0.95rem;
         }
         .scorer-goals {
             background: #facc15;
             color: #0f172a;
-            padding: 2px 12px;
+            padding: 4px 12px;
             border-radius: 30px;
             font-weight: bold;
-            margin-left: 10px;
+            margin-left: 8px;
         }
         button {
             font-family: 'Cairo', sans-serif;
             cursor: pointer;
             border: none;
-            padding: 6px 14px;
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 40px;
             font-weight: bold;
+            font-size: 0.85rem;
+            transition: 0.1s;
         }
         .save-btn {
             background: #22c55e;
             color: white;
             margin-top: 15px;
+            width: 100%;
         }
         .add-goal {
             background: #3b82f6;
@@ -171,28 +185,28 @@
         .draw { background: #9ca3af; }
         .loss { background: #ef4444; }
         
-        /* ---------- شجرة البطولة (Knockout Bracket) ---------- */
+        /* شجرة البطولة - تكديس عمودي للهواتف */
         .bracket {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
         }
         .semi-bracket {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 50px;
-            position: relative;
+            gap: 25px;
+            width: 100%;
         }
         .semi-match {
             background: #1e293b;
-            border-radius: 16px;
-            width: 320px;
-            padding: 12px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 340px;
+            padding: 14px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            position: relative;
         }
         .semi-match h4 {
             color: #facc15;
@@ -201,13 +215,13 @@
         }
         .match-teams {
             font-weight: bold;
-            margin: 8px 0;
-            font-size: 1.1rem;
+            margin: 10px 0;
+            font-size: 1rem;
         }
         .leg-container {
             background: #0f172a;
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 14px;
+            padding: 8px;
             margin: 8px 0;
         }
         .leg-title {
@@ -217,17 +231,23 @@
         .score-inputs {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 4px;
+            gap: 15px;
+            margin-top: 6px;
         }
         .score-inputs input {
-            width: 50px;
+            width: 60px;
             background: #020617;
             border: 1px solid #475569;
             color: white;
             text-align: center;
-            border-radius: 8px;
-            padding: 5px;
+            border-radius: 12px;
+            padding: 8px;
+            font-size: 1rem;
+        }
+        .score-inputs input:disabled {
+            background: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
         }
         .aggregate {
             font-size: 0.75rem;
@@ -237,53 +257,90 @@
         .winner-tag {
             background: #10b981;
             display: inline-block;
-            padding: 2px 10px;
+            padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.7rem;
-            margin-top: 6px;
+            margin-top: 8px;
         }
         .final-bracket {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 50px;
-            margin-top: 20px;
-            position: relative;
+            gap: 25px;
+            width: 100%;
+            margin-top: 10px;
         }
         .final-match, .third-match {
             background: #1e293b;
-            border-radius: 16px;
-            width: 300px;
-            padding: 12px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
             text-align: center;
         }
         .final-match h4, .third-match h4 {
             color: #facc15;
+            margin-bottom: 8px;
         }
         .champion-message {
             background: linear-gradient(135deg, #f59e0b, #ef4444);
-            padding: 15px 25px;
+            padding: 14px 20px;
             border-radius: 60px;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
-            margin-top: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            margin-top: 25px;
+            width: 100%;
         }
-        /* خطوط بسيطة للتوصيل (اختيارية) */
-        @media (min-width: 900px) {
-            .semi-bracket::before {
-                content: '';
-                position: absolute;
-                bottom: -25px;
-                width: 80%;
-                height: 2px;
-                background: #475569;
-                display: none; /* يمكن تفعيلها لكنها معقدة */
+        .lock-message {
+            background: #334155;
+            padding: 12px;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #facc15;
+        }
+        /* تحسينات إضافية للهواتف */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+            .match {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .match .teams {
+                text-align: center;
+            }
+            .match .time {
+                text-align: center;
+            }
+            .match div:last-child {
+                justify-content: center;
+            }
+            .scorer-item {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .scorer-name {
+                margin-bottom: 5px;
+            }
+            .add-goal, .delete-player {
+                margin-top: 5px;
+            }
+            .group-box {
+                overflow-x: auto;
             }
         }
-        @media (max-width: 800px) {
-            .semi-match { width: 280px; }
+        /* تحسين للأزرار */
+        button:active {
+            transform: scale(0.96);
+        }
+        input:focus {
+            outline: none;
+            border-color: #38bdf8;
         }
     </style>
 </head>
@@ -302,14 +359,14 @@
         <div class="group-box">
             <h3>🏆 المجموعة الأولى</h3>
             <table id="groupATable">
-                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>عليه</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></thead>
+                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>ع</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
         <div class="group-box">
             <h3>🏆 المجموعة الثانية</h3>
             <table id="groupBTable">
-                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>عليه</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></tr></thead>
+                <thead><tr><th>فريق</th><th>ل</th><th>ف</th><th>ت</th><th>خ</th><th>له</th><th>ع</th><th>فارق</th><th>نقاط</th><th>آخر 3</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -325,19 +382,29 @@
 
 <!-- الهدافين -->
 <div id="scorers" class="page">
-    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-        <input type="text" id="newPlayerName" placeholder="اسم اللاعب" style="flex:1; padding: 8px; border-radius: 30px; border: none; background:#1e293b; color:white;">
-        <button class="add-player" onclick="addScorer()">➕ إضافة لاعب</button>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+        <input type="text" id="newPlayerName" placeholder="اسم اللاعب" style="flex:1; padding: 10px; border-radius: 40px; border: none; background:#1e293b; color:white; font-size: 1rem;">
+        <button class="add-player" onclick="addScorer()" style="padding: 10px 18px;">➕ إضافة لاعب</button>
     </div>
     <div id="scorersList"></div>
 </div>
 
-<!-- النهائيات (Knockout Bracket) -->
+<!-- النهائيات (Knockout Bracket) مع قفل حتى 30 مارس 2026 -->
 <div id="finals" class="page">
     <div id="bracketContainer" class="bracket"></div>
 </div>
 
 <script>
+    // -------------------- قفل النهائيات حتى 30 مارس 2026 --------------------
+    const LOCK_DATE = new Date(2026, 2, 30); // 30 مارس 2026 (الشهر 2 = مارس)
+    function isFinalsLocked() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const lockDate = new Date(LOCK_DATE);
+        lockDate.setHours(0, 0, 0, 0);
+        return today < lockDate;
+    }
+
     // -------------------- الفرق والمجموعات --------------------
     const GROUP_A = ["قروسل", "رابحي", "اسماعيل"];
     const GROUP_B = ["الطاهر", "جمال", "حقو"];
@@ -426,8 +493,14 @@
                 const boxes = last3.map(r => `<span class="form-box ${r === 'win' ? 'win' : r === 'draw' ? 'draw' : 'loss'}"></span>`).join('');
                 return `<tr>
                     <td>${team.name}</td>
-                    <td>${team.p}</td><td>${team.w}</td><td>${team.d}</td><td>${team.l}</td>
-                    <td>${team.gs}</td><td>${team.ga}</td><td>${diff}</td><td>${team.pts}</td>
+                    <td>${team.p}</td>
+                    <td>${team.w}</td>
+                    <td>${team.d}</td>
+                    <td>${team.l}</td>
+                    <td>${team.gs}</td>
+                    <td>${team.ga}</td>
+                    <td>${diff}</td>
+                    <td>${team.pts}</td>
                     <td>${boxes || '—'}</td>
                 </tr>`;
             }).join('');
@@ -533,10 +606,12 @@
         return null;
     }
 
-    // عرض شجرة البطولة (Knockout Bracket)
     function renderBracket() {
         const container = document.getElementById("bracketContainer");
         if (!container) return;
+
+        const locked = isFinalsLocked();
+        const lockMessage = locked ? '<div class="lock-message">🔒 النهائيات مقفلة حتى 30 مارس 2026. سيتم فتحها تلقائياً بعد هذا التاريخ.</div>' : '';
 
         const semi1Winner = getSemiWinner(knockout.semi1);
         const semi2Winner = getSemiWinner(knockout.semi2);
@@ -550,49 +625,47 @@
 
         const champion = getChampion();
 
-        let html = `
+        let html = lockMessage + `
             <div class="semi-bracket">
-                <!-- نصف النهائي 1 -->
                 <div class="semi-match">
                     <h4>🏅 نصف النهائي 1 (ذهاب/إياب)</h4>
                     <div class="match-teams">${knockout.semi1.t1} 🆚 ${knockout.semi1.t2}</div>
                     <div class="leg-container">
                         <div class="leg-title">مباراة الذهاب</div>
                         <div class="score-inputs">
-                            <input type="number" id="semi1_leg1_1" value="${knockout.semi1.leg1.score1}" placeholder="0" min="0">
+                            <input type="number" id="semi1_leg1_1" value="${knockout.semi1.leg1.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                             <span>-</span>
-                            <input type="number" id="semi1_leg1_2" value="${knockout.semi1.leg1.score2}" placeholder="0" min="0">
+                            <input type="number" id="semi1_leg1_2" value="${knockout.semi1.leg1.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                     <div class="leg-container">
                         <div class="leg-title">مباراة الإياب</div>
                         <div class="score-inputs">
-                            <input type="number" id="semi1_leg2_1" value="${knockout.semi1.leg2.score1}" placeholder="0" min="0">
+                            <input type="number" id="semi1_leg2_1" value="${knockout.semi1.leg2.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                             <span>-</span>
-                            <input type="number" id="semi1_leg2_2" value="${knockout.semi1.leg2.score2}" placeholder="0" min="0">
+                            <input type="number" id="semi1_leg2_2" value="${knockout.semi1.leg2.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                     <div class="aggregate">المجموع: ${semi1Agg}</div>
                     ${semi1Winner ? `<div class="winner-tag">✅ الفائز: ${semi1Winner}</div>` : '<div class="aggregate">⏳ لم يتحدد بعد</div>'}
                 </div>
-                <!-- نصف النهائي 2 -->
                 <div class="semi-match">
                     <h4>🏅 نصف النهائي 2 (ذهاب/إياب)</h4>
                     <div class="match-teams">${knockout.semi2.t1} 🆚 ${knockout.semi2.t2}</div>
                     <div class="leg-container">
                         <div class="leg-title">مباراة الذهاب</div>
                         <div class="score-inputs">
-                            <input type="number" id="semi2_leg1_1" value="${knockout.semi2.leg1.score1}" placeholder="0" min="0">
+                            <input type="number" id="semi2_leg1_1" value="${knockout.semi2.leg1.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                             <span>-</span>
-                            <input type="number" id="semi2_leg1_2" value="${knockout.semi2.leg1.score2}" placeholder="0" min="0">
+                            <input type="number" id="semi2_leg1_2" value="${knockout.semi2.leg1.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                     <div class="leg-container">
                         <div class="leg-title">مباراة الإياب</div>
                         <div class="score-inputs">
-                            <input type="number" id="semi2_leg2_1" value="${knockout.semi2.leg2.score1}" placeholder="0" min="0">
+                            <input type="number" id="semi2_leg2_1" value="${knockout.semi2.leg2.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                             <span>-</span>
-                            <input type="number" id="semi2_leg2_2" value="${knockout.semi2.leg2.score2}" placeholder="0" min="0">
+                            <input type="number" id="semi2_leg2_2" value="${knockout.semi2.leg2.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         </div>
                     </div>
                     <div class="aggregate">المجموع: ${semi2Agg}</div>
@@ -604,18 +677,18 @@
                     <h4>🏆 المباراة النهائية</h4>
                     <div class="match-teams">${knockout.final.t1} 🆚 ${knockout.final.t2}</div>
                     <div class="score-inputs">
-                        <input type="number" id="final_1" value="${knockout.final.score1}" placeholder="0" min="0">
+                        <input type="number" id="final_1" value="${knockout.final.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         <span>-</span>
-                        <input type="number" id="final_2" value="${knockout.final.score2}" placeholder="0" min="0">
+                        <input type="number" id="final_2" value="${knockout.final.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                     </div>
                 </div>
                 <div class="third-match">
                     <h4>🥉 مباراة المركز الثالث</h4>
                     <div class="match-teams">${knockout.third.t1} 🆚 ${knockout.third.t2}</div>
                     <div class="score-inputs">
-                        <input type="number" id="third_1" value="${knockout.third.score1}" placeholder="0" min="0">
+                        <input type="number" id="third_1" value="${knockout.third.score1}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                         <span>-</span>
-                        <input type="number" id="third_2" value="${knockout.third.score2}" placeholder="0" min="0">
+                        <input type="number" id="third_2" value="${knockout.third.score2}" placeholder="0" min="0" ${locked ? 'disabled' : ''}>
                     </div>
                 </div>
             </div>
@@ -629,7 +702,9 @@
 
         container.innerHTML = html;
         
-        // ربط الأحداث
+        if (locked) return;
+
+        // ربط الأحداث فقط إذا لم يكن مقفلاً
         const semi1_leg1_1 = document.getElementById("semi1_leg1_1");
         const semi1_leg1_2 = document.getElementById("semi1_leg1_2");
         const semi1_leg2_1 = document.getElementById("semi1_leg2_1");
